@@ -5,7 +5,7 @@ Created on Tue May 21 13:45:56 2019
 """
 
 # import data cleaning functions
-from cleandata import address_clean, beds_clean, baths_clean, homesize_clean, lot_clean, yearbuilt_clean, garage_clean
+from cleandata import address_clean, beds_clean, baths_clean, homesize_clean, lot_clean, yearbuilt_clean, garage_clean, price_clean
 
 # import modules
 from bs4 import BeautifulSoup
@@ -66,7 +66,7 @@ def webscrape(zipcodes):
         yearbuilt = yearbuilt_clean(yearbuilt_raw)
         garage = garage_clean(garage_raw)
         hometype = re.findall(r'\s\s(\w+\s\w+\s\w+)', str(hometype_raw))
-        price = list(map(int, [re.sub('[$,]', '', i) for i in price_raw]))
+        price = price_clean(price_raw)
 
         # count up lengths of arrays to be joined
         len_address = 'Address', len(address)

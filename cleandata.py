@@ -30,7 +30,7 @@ def address_clean(address_raw):
             continue
         # get city
         try:
-            city_temp = re.findall(r',\s(\w+), CA|,\s(\w+\s\w+), CA|,\s(\w+\s\w+\s\w+), CA|,\s(–), CA', line)
+            city_temp = re.findall(r',\s+(\w+), CA|,\s+(\w+\s\w+), CA|,\s+(\w+\s\w+\s\w+), CA|,\s+(–), CA', line)
             city_temp2 = list(filter(None, [i for i in city_temp[0]]))[0]
         except:
             print('Failed to capture city of %s' % line)
@@ -61,21 +61,17 @@ def baths_clean(baths_raw):
         map(lambda m: tuple(filter(bool, m)), re.findall(r'(\d+/+\d+)|(\d+)|(–/\d+)|(–)', str(baths_raw))))
     baths_temp2 = [i[0] for i in baths_temp1]
     baths_temp3 = [re.sub('/1', '.5', i) for i in baths_temp2]
-    baths_temp4 = []
-    for i in baths_temp3:
-        if i[-2:] == '/2':
-            baths_temp4.append(str(int(i[0]) + 1))
-        elif i[-2:] == '/3':
-            baths_temp4.append(str(int(i[0]) + 1.5))
-        elif i[-2:] == '/4':
-            baths_temp4.append(str(int(i[0]) + 2))
-        elif i[-2:] == '/5':
-            baths_temp4.append(str(int(i[0]) + 2.5))
-        elif i[0] == '–':
-            baths_temp4.append(0)
-        else:
-            baths_temp4.append(i)
-    baths = list(map(float, baths_temp4))
+    baths_temp4 = [re.sub(r"[^/\d\w\.]+", '0', i) for i in baths_temp3]
+    baths_temp5 = []
+
+    # turn fractional representation of half baths to decimal
+    for i in baths_temp4:
+        if '/' in i:
+           i = i.split('/')
+           i = float(i[0])+float(i[1])*.5
+        baths_temp5.append(str(i))
+
+    baths = list(map(float, baths_temp5))
     return baths
 
 
@@ -138,3 +134,14 @@ def garage_clean(garage_raw):
         except:
             garage.append(0)
     return garage
+
+# get rid of everything that isn't a number
+def price_clean(price_raw):
+    price = []
+    for i in range(0, int(len(price_raw))):
+        try:
+            i = re.sub('[$,]', '', price_raw[i])
+            price.append(int(i))
+        except:
+            price.append(0)
+    return price

@@ -5,7 +5,7 @@ os.chdir('C:\\Users\\maxjw\\PycharmProjects\\Realestate') # Mac
 
 # import zipcodes
 from csvreader import csvread
-filename = './Data/zipcodes.csv'
+filename = './Data/all_cali_zipcodes.csv'
 zipcodes_all = csvread(filename)
 
 # select subset of zip codes
@@ -13,7 +13,7 @@ zipcodes = zipcodes_all[100:110]
 
 # scrape MLS listings
 from scrapeweb import webscrape
-data_all = webscrape(zipcodes)
+data_all = webscrape(zipcodes_all)
 
 ## find zip codes with no listings found
 #import numpy as np
