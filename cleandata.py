@@ -22,21 +22,21 @@ def address_clean(address_raw):
         # get address
         try:
             address_temp = re.findall(
-                r'\"(\S+\s\S+),|\"(\S+\s\S+\s\S+),|\"(\S+\s\S+\s\S+\s\S+),|\"(\S+\s\S+\s\S+\s\S+\s\S+),|\"(\S+\s\S+\s\S+\s\S+\s\S+\s\S+),',
+                r'[^,]*',
                 f'"{line}"')
-            address_temp2 = list(filter(None, [i for i in address_temp[0]]))[0]
+            address_temp2 = address_temp[0]
         except:
             print('Failed to capture address of %s' % line)
             continue
         # get city
         try:
-            city_temp = re.findall(r',\s+(\w+), CA|,\s+(\w+\s\w+), CA|,\s+(\w+\s\w+\s\w+), CA|,\s+(–), CA', line)
-            city_temp2 = list(filter(None, [i for i in city_temp[0]]))[0]
+            city_temp = re.findall(r',\s+(.*), CA', line)
+            city_temp2 = city_temp
         except:
             print('Failed to capture city of %s' % line)
             continue
         # get zipcode
-        zip_code_temp = re.findall(r'CA (\d\d\d\d\d)', line)[0]
+        zip_code_temp = re.findall(r'.*(\d\d\d\d\d)', line)[0]
         # if address, city, and zip have been pulled successfully, create objects
         if address_temp2 and city_temp2 and zip_code_temp:
             address.append(address_temp2)

@@ -103,11 +103,11 @@ def webscrape(zipcodes):
                          'Home type': hometype, 'Price': price}
 
             dataframe_temp = pd.DataFrame(data_temp)
-            data_all = data_all.append(dataframe_temp)
+            data_all = pd.concat([data_all, dataframe_temp])
         except:
             print('Zipcode %s was skipped' % zipcode)
 
         # wait, then scrape next zipcode
-        time.sleep(1)
+        # time.sleep(.5)
 
     return data_all
