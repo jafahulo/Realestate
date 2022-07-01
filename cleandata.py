@@ -24,14 +24,14 @@ def address_clean(address_raw):
             address_temp = re.findall(
                 r'[^,]*',
                 f'"{line}"')
-            address_temp2 = address_temp[0]
+            address_temp2 = address_temp[0][1:]
         except:
             print('Failed to capture address of %s' % line)
             continue
         # get city
         try:
             city_temp = re.findall(r',\s+(.*), CA', line)
-            city_temp2 = city_temp
+            city_temp2 = city_temp[0]
         except:
             print('Failed to capture city of %s' % line)
             continue
